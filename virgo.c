@@ -18,7 +18,8 @@
 #define MOD_NOREPEAT 0x4000
 #endif
 
-#define NUM_DESKTOPS 4
+/*from 4 to 6*/
+#define NUM_DESKTOPS 6
 
 typedef struct {
 	HWND *windows;
@@ -254,8 +255,10 @@ static void virgo_init(Virgo *v)
 	}
 	register_hotkey(i * 2, MOD_ALT | MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT,
 					'Q');
+
+					/*the original S used by the everything, so change to D*/
 	register_hotkey(i * 2 + 1, MOD_ALT | MOD_CONTROL | MOD_SHIFT | MOD_NOREPEAT,
-					'S');
+					'D');
 	trayicon_init(&v->trayicon);
 }
 
@@ -313,9 +316,13 @@ void __main(void)
 		if (msg.wParam == NUM_DESKTOPS * 2 + 1) {
 			virgo_toggle_hotkeys(&v);
 		} else if (msg.wParam % 2 == 0) {
-			virgo_go_to_desk(&v, msg.wParam / 2);
+			/*modify ctrl go to desk */
+			/*virgo_go_to_desk(&v, msg.wParam / 2);*/
+			virgo_move_to_desk(&v, (msg.wParam) / 2);
 		} else {
-			virgo_move_to_desk(&v, (msg.wParam - 1) / 2);
+			/*modify alt move to desk */
+			/*virgo_move_to_desk(&v, (msg.wParam - 1) / 2);*/
+			virgo_go_to_desk(&v, (msg.wParam - 1) / 2);
 		}
 	}
 	virgo_deinit(&v);
